@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SlideController = void 0;
 const common_1 = require("@nestjs/common");
@@ -143,6 +142,6 @@ __decorate([
 ], SlideController.prototype, "remove", null);
 exports.SlideController = SlideController = __decorate([
     (0, common_1.Controller)('api/dataslide'),
-    __metadata("design:paramtypes", [typeof (_a = typeof slide_service_1.SlideService !== "undefined" && slide_service_1.SlideService) === "function" ? _a : Object])
+    __metadata("design:paramtypes", [slide_service_1.SlideService])
 ], SlideController);
 //# sourceMappingURL=slide.controller.js.map

@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PenghargaanController = void 0;
 const common_1 = require("@nestjs/common");
@@ -143,6 +142,6 @@ __decorate([
 ], PenghargaanController.prototype, "remove", null);
 exports.PenghargaanController = PenghargaanController = __decorate([
     (0, common_1.Controller)('api/datapenghargaan'),
-    __metadata("design:paramtypes", [typeof (_a = typeof penghargaan_service_1.PenghargaanService !== "undefined" && penghargaan_service_1.PenghargaanService) === "function" ? _a : Object])
+    __metadata("design:paramtypes", [penghargaan_service_1.PenghargaanService])
 ], PenghargaanController);
 //# sourceMappingURL=penghargaan.controller.js.map

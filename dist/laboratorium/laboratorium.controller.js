@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LaboratoriumController = void 0;
 const common_1 = require("@nestjs/common");
@@ -143,6 +142,6 @@ __decorate([
 ], LaboratoriumController.prototype, "remove", null);
 exports.LaboratoriumController = LaboratoriumController = __decorate([
     (0, common_1.Controller)('api/datalaboratorium'),
-    __metadata("design:paramtypes", [typeof (_a = typeof laboratorium_service_1.LaboratoriumService !== "undefined" && laboratorium_service_1.LaboratoriumService) === "function" ? _a : Object])
+    __metadata("design:paramtypes", [laboratorium_service_1.LaboratoriumService])
 ], LaboratoriumController);
 //# sourceMappingURL=laboratorium.controller.js.map

@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.McuController = void 0;
 const common_1 = require("@nestjs/common");
@@ -143,6 +142,6 @@ __decorate([
 ], McuController.prototype, "remove", null);
 exports.McuController = McuController = __decorate([
     (0, common_1.Controller)('api/datamcu'),
-    __metadata("design:paramtypes", [typeof (_a = typeof mcu_service_1.McuService !== "undefined" && mcu_service_1.McuService) === "function" ? _a : Object])
+    __metadata("design:paramtypes", [mcu_service_1.McuService])
 ], McuController);
 //# sourceMappingURL=mcu.controller.js.map

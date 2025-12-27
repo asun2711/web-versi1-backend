@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RadiologiController = void 0;
 const common_1 = require("@nestjs/common");
@@ -143,6 +142,6 @@ __decorate([
 ], RadiologiController.prototype, "remove", null);
 exports.RadiologiController = RadiologiController = __decorate([
     (0, common_1.Controller)('api/dataradiologi'),
-    __metadata("design:paramtypes", [typeof (_a = typeof radiologi_service_1.RadiologiService !== "undefined" && radiologi_service_1.RadiologiService) === "function" ? _a : Object])
+    __metadata("design:paramtypes", [radiologi_service_1.RadiologiService])
 ], RadiologiController);
 //# sourceMappingURL=radiologi.controller.js.map
