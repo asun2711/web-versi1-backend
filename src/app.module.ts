@@ -44,11 +44,12 @@ import { ContactModule } from './contact/contact.module';
         password: config.get<string>('DB_PASSWORD'),
         database: config.get<string>('DB_NAME'),
         autoLoadEntities: true,
+        synchronize: true,
 
         // AUTO OFF DI PRODUCTION
-        synchronize:
-          config.get('NODE_ENV') !== 'production' ||
-          process.env.FIRST_INIT === 'true',
+        // synchronize:
+        //   config.get('NODE_ENV') !== 'production' ||
+        //   process.env.FIRST_INIT === 'true',
       }),
     }),
 
