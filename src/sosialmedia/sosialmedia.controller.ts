@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { extname } from 'path';
+import { join, extname } from 'path';
 import { SosialMediaService } from './sosialmedia.service';
 
 @Controller('api/datasosialmedia')
@@ -33,7 +33,7 @@ export class SosialMediaController {
   @UseInterceptors(
     FileInterceptor('iconsosialmedia', {
       storage: diskStorage({
-        destination: './uploads/sosialmedia',
+        destination: join(process.cwd(), 'uploads/sosialmedia'),
         filename: (req, file, callback) => {
           const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
           const ext = extname(file.originalname);
@@ -68,7 +68,7 @@ export class SosialMediaController {
   @UseInterceptors(
     FileInterceptor('iconsosialmedia', {
       storage: diskStorage({
-        destination: './uploads/sosialmedia',
+        destination: join(process.cwd(), 'uploads/sosialmedia'),
         filename: (req, file, callback) => {
           const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
           const ext = extname(file.originalname);

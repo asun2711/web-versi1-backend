@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { extname } from 'path';
+import { join, extname } from 'path';
 import { PenghargaanService } from './penghargaan.service';
 
 @Controller('api/datapenghargaan')
@@ -33,7 +33,7 @@ export class PenghargaanController {
   @UseInterceptors(
     FileInterceptor('gambarpenghargaan', {
       storage: diskStorage({
-       destination: './uploads/penghargaan', // Pastikan folder ini ada
+        destination: join(process.cwd(), 'uploads/penghargaan'),
         filename: (req, file, callback) => {
           const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
           const ext = extname(file.originalname);
@@ -68,7 +68,7 @@ export class PenghargaanController {
   @UseInterceptors(
     FileInterceptor('gambarpenghargaan', {
       storage: diskStorage({
-       destination: './uploads/penghargaan', // Pastikan folder ini ada
+        destination: join(process.cwd(), 'uploads/penghargaan'),
         filename: (req, file, callback) => {
           const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
           const ext = extname(file.originalname);

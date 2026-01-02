@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { extname } from 'path';
+import { join, extname } from 'path';
 import { StrukturService } from './struktur.service';
 
 @Controller('api/datastruktur')
@@ -33,7 +33,7 @@ export class StrukturController {
   @UseInterceptors(
     FileInterceptor('gambardireksi', {
       storage: diskStorage({
-       destination: './uploads/struktur', // Pastikan folder ini ada
+        destination: join(process.cwd(), 'uploads/struktur'),
         filename: (req, file, callback) => {
           const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
           const ext = extname(file.originalname);
@@ -68,7 +68,7 @@ export class StrukturController {
   @UseInterceptors(
     FileInterceptor('gambardireksi', {
       storage: diskStorage({
-       destination: './uploads/struktur', // Pastikan folder ini ada
+       destination: join(process.cwd(), 'uploads/struktur'),
         filename: (req, file, callback) => {
           const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
           const ext = extname(file.originalname);

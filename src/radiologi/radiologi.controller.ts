@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { extname } from 'path';
+import { join, extname } from 'path';
 import { RadiologiService } from './radiologi.service';
 
 @Controller('api/dataradiologi')
@@ -33,7 +33,7 @@ export class RadiologiController {
   @UseInterceptors(
     FileInterceptor('gambarradiologi', {
       storage: diskStorage({
-       destination: './uploads/radiologi', // Pastikan folder ini ada
+        destination: join(process.cwd(), 'uploads/radiologi'),
         filename: (req, file, callback) => {
           const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
           const ext = extname(file.originalname);
@@ -68,7 +68,7 @@ export class RadiologiController {
   @UseInterceptors(
     FileInterceptor('gambarradiologi', {
       storage: diskStorage({
-       destination: './uploads/radiologi', // Pastikan folder ini ada
+       destination: join(process.cwd(), 'uploads/radiologi'),
         filename: (req, file, callback) => {
           const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
           const ext = extname(file.originalname);
