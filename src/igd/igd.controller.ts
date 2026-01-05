@@ -14,6 +14,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { join, extname } from 'path';
 import { IgdService } from './igd.service';
+import sharp from 'sharp';
 
 @Controller('api/dataigd')
 export class IgdController {
@@ -33,7 +34,7 @@ export class IgdController {
   @UseInterceptors(
     FileInterceptor('gambarigd', {
       storage: diskStorage({
-       destination: join(process.cwd(), 'uploads/igd'),
+        destination: join(process.cwd(), 'uploads/igd'),
         filename: (req, file, callback) => {
           const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
           const ext = extname(file.originalname);
@@ -45,17 +46,27 @@ export class IgdController {
         const mimetype = allowedTypes.test(file.mimetype);
         const extnameCheck = allowedTypes.test(extname(file.originalname).toLowerCase());
 
-        if (mimetype && extnameCheck) {
-          callback(null, true);
-        } else {
-          callback(new BadRequestException('Only image files are allowed!'), false);
-        }
+        if (mimetype && extnameCheck) callback(null, true);
+        else callback(new BadRequestException('Only image files are allowed!'), false);
       },
     }),
   )
   async create(@Body() data: any, @UploadedFile() file: any) {
     try {
       if (file) {
+        const filePath = join(process.cwd(), 'uploads/igd', file.filename);
+        const fileExt = extname(file.originalname).toLowerCase();
+        const image = sharp(file.path);
+
+        // Kompres sesuai format asli
+        if (fileExt === '.jpg' || fileExt === '.jpeg') {
+          await image.jpeg({ quality: 30 }).toFile(filePath);
+        } else if (fileExt === '.png') {
+          await image.png({ compressionLevel: 9 }).toFile(filePath);
+        } else if (fileExt === '.gif') {
+          await image.gif().toFile(filePath);
+        }
+
         data.gambarigd = file.filename;
       }
       return await this.service.create(data);
@@ -68,7 +79,7 @@ export class IgdController {
   @UseInterceptors(
     FileInterceptor('gambarigd', {
       storage: diskStorage({
-       destination: join(process.cwd(), 'uploads/igd'),
+        destination: join(process.cwd(), 'uploads/igd'),
         filename: (req, file, callback) => {
           const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
           const ext = extname(file.originalname);
@@ -80,17 +91,27 @@ export class IgdController {
         const mimetype = allowedTypes.test(file.mimetype);
         const extnameCheck = allowedTypes.test(extname(file.originalname).toLowerCase());
 
-        if (mimetype && extnameCheck) {
-          callback(null, true);
-        } else {
-          callback(new BadRequestException('Only image files are allowed!'), false);
-        }
+        if (mimetype && extnameCheck) callback(null, true);
+        else callback(new BadRequestException('Only image files are allowed!'), false);
       },
     }),
   )
   async update(@Param('id') id: string, @Body() data: any, @UploadedFile() file: any) {
     try {
       if (file) {
+        const filePath = join(process.cwd(), 'uploads/igd', file.filename);
+        const fileExt = extname(file.originalname).toLowerCase();
+        const image = sharp(file.path);
+
+        // Kompres sesuai format asli
+        if (fileExt === '.jpg' || fileExt === '.jpeg') {
+          await image.jpeg({ quality: 30 }).toFile(filePath);
+        } else if (fileExt === '.png') {
+          await image.png({ compressionLevel: 9 }).toFile(filePath);
+        } else if (fileExt === '.gif') {
+          await image.gif().toFile(filePath);
+        }
+
         data.gambarigd = file.filename;
       }
       return await this.service.update(+id, data);

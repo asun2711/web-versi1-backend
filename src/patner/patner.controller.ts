@@ -14,6 +14,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { join, extname } from 'path';
 import { PatnerService } from './patner.service';
+import sharp from 'sharp';
 
 @Controller('api/datapatner')
 export class PatnerController {
@@ -45,17 +46,27 @@ export class PatnerController {
         const mimetype = allowedTypes.test(file.mimetype);
         const extnameCheck = allowedTypes.test(extname(file.originalname).toLowerCase());
 
-        if (mimetype && extnameCheck) {
-          callback(null, true);
-        } else {
-          callback(new BadRequestException('Only image files are allowed!'), false);
-        }
+        if (mimetype && extnameCheck) callback(null, true);
+        else callback(new BadRequestException('Only image files are allowed!'), false);
       },
     }),
   )
   async create(@Body() data: any, @UploadedFile() file: any) {
     try {
       if (file) {
+        const filePath = join(process.cwd(), 'uploads/patner', file.filename);
+        const fileExt = extname(file.originalname).toLowerCase();
+        const image = sharp(file.path);
+
+        // Kompres sesuai format asli
+        if (fileExt === '.jpg' || fileExt === '.jpeg') {
+          await image.jpeg({ quality: 30 }).toFile(filePath);
+        } else if (fileExt === '.png') {
+          await image.png({ compressionLevel: 9 }).toFile(filePath);
+        } else if (fileExt === '.gif') {
+          await image.gif().toFile(filePath);
+        }
+
         data.gambarpatner = file.filename;
       }
       return await this.service.create(data);
@@ -80,17 +91,27 @@ export class PatnerController {
         const mimetype = allowedTypes.test(file.mimetype);
         const extnameCheck = allowedTypes.test(extname(file.originalname).toLowerCase());
 
-        if (mimetype && extnameCheck) {
-          callback(null, true);
-        } else {
-          callback(new BadRequestException('Only image files are allowed!'), false);
-        }
+        if (mimetype && extnameCheck) callback(null, true);
+        else callback(new BadRequestException('Only image files are allowed!'), false);
       },
     }),
   )
   async update(@Param('id') id: string, @Body() data: any, @UploadedFile() file: any) {
     try {
       if (file) {
+        const filePath = join(process.cwd(), 'uploads/patner', file.filename);
+        const fileExt = extname(file.originalname).toLowerCase();
+        const image = sharp(file.path);
+
+        // Kompres sesuai format asli
+        if (fileExt === '.jpg' || fileExt === '.jpeg') {
+          await image.jpeg({ quality: 30 }).toFile(filePath);
+        } else if (fileExt === '.png') {
+          await image.png({ compressionLevel: 9 }).toFile(filePath);
+        } else if (fileExt === '.gif') {
+          await image.gif().toFile(filePath);
+        }
+
         data.gambarpatner = file.filename;
       }
       return await this.service.update(+id, data);

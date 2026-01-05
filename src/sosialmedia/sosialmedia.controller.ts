@@ -14,6 +14,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { join, extname } from 'path';
 import { SosialMediaService } from './sosialmedia.service';
+import sharp from 'sharp';
 
 @Controller('api/datasosialmedia')
 export class SosialMediaController {
@@ -44,20 +45,30 @@ export class SosialMediaController {
         const allowedTypes = /jpg|jpeg|png|gif/;
         const mimetype = allowedTypes.test(file.mimetype);
         const extnameCheck = allowedTypes.test(extname(file.originalname).toLowerCase());
-
-        if (mimetype && extnameCheck) {
-          callback(null, true);
-        } else {
-          callback(new BadRequestException('Only image files are allowed!'), false);
-        }
+        if (mimetype && extnameCheck) callback(null, true);
+        else callback(new BadRequestException('Only image files are allowed!'), false);
       },
     }),
   )
   async create(@Body() data: any, @UploadedFile() file: any) {
     try {
       if (file) {
+        const filePath = join(process.cwd(), 'uploads/sosialmedia', file.filename);
+        const fileExt = extname(file.originalname).toLowerCase();
+        const image = sharp(file.path);
+
+        // Kompres sesuai format
+        if (fileExt === '.jpg' || fileExt === '.jpeg') {
+          await image.jpeg({ quality: 30 }).toFile(filePath);
+        } else if (fileExt === '.png') {
+          await image.png({ compressionLevel: 9 }).toFile(filePath);
+        } else if (fileExt === '.gif') {
+          await image.gif().toFile(filePath);
+        }
+
         data.iconsosialmedia = file.filename;
       }
+
       return await this.service.create(data);
     } catch (error) {
       throw new BadRequestException('Failed to save sosialmedia data: ' + error.message);
@@ -79,20 +90,30 @@ export class SosialMediaController {
         const allowedTypes = /jpg|jpeg|png|gif/;
         const mimetype = allowedTypes.test(file.mimetype);
         const extnameCheck = allowedTypes.test(extname(file.originalname).toLowerCase());
-
-        if (mimetype && extnameCheck) {
-          callback(null, true);
-        } else {
-          callback(new BadRequestException('Only image files are allowed!'), false);
-        }
+        if (mimetype && extnameCheck) callback(null, true);
+        else callback(new BadRequestException('Only image files are allowed!'), false);
       },
     }),
   )
   async update(@Param('id') id: string, @Body() data: any, @UploadedFile() file: any) {
     try {
       if (file) {
+        const filePath = join(process.cwd(), 'uploads/sosialmedia', file.filename);
+        const fileExt = extname(file.originalname).toLowerCase();
+        const image = sharp(file.path);
+
+        // Kompres sesuai format
+        if (fileExt === '.jpg' || fileExt === '.jpeg') {
+          await image.jpeg({ quality: 30 }).toFile(filePath);
+        } else if (fileExt === '.png') {
+          await image.png({ compressionLevel: 9 }).toFile(filePath);
+        } else if (fileExt === '.gif') {
+          await image.gif().toFile(filePath);
+        }
+
         data.iconsosialmedia = file.filename;
       }
+
       return await this.service.update(+id, data);
     } catch (error) {
       throw new BadRequestException('Failed to update sosialmedia data: ' + error.message);

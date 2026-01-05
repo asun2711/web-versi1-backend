@@ -57,7 +57,7 @@ export class PerusahaanController {
         const fileExt = extname(file.originalname).toLowerCase();
         const image = sharp(file.path);
 
-        // Kompres dan simpan sesuai format asli
+        // Kompres / optimasi sesuai format file
         if (fileExt === '.jpg' || fileExt === '.jpeg') {
           await image.jpeg({ quality: 30 }).toFile(filePath);
         } else if (fileExt === '.png') {
@@ -102,6 +102,7 @@ export class PerusahaanController {
         const fileExt = extname(file.originalname).toLowerCase();
         const image = sharp(file.path);
 
+        // Kompres / optimasi sesuai format file
         if (fileExt === '.jpg' || fileExt === '.jpeg') {
           await image.jpeg({ quality: 30 }).toFile(filePath);
         } else if (fileExt === '.png') {
@@ -109,6 +110,7 @@ export class PerusahaanController {
         } else if (fileExt === '.gif') {
           await image.gif().toFile(filePath);
         }
+
         data.logoperusahaan = file.filename;
       }
 

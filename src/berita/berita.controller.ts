@@ -14,6 +14,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { join, extname } from 'path';
 import { BeritaService } from './berita.service';
+import sharp from 'sharp';
 
 @Controller('api/databerita')
 export class BeritaController {
@@ -56,6 +57,19 @@ export class BeritaController {
   async create(@Body() data: any, @UploadedFile() file: any) {
     try {
       if (file) {
+        const filePath = join(process.cwd(), 'uploads/berita', file.filename);
+        const fileExt = extname(file.originalname).toLowerCase();
+        const image = sharp(file.path);
+
+        // Kompres dan simpan sesuai format asli
+        if (fileExt === '.jpg' || fileExt === '.jpeg') {
+          await image.jpeg({ quality: 30 }).toFile(filePath);
+        } else if (fileExt === '.png') {
+          await image.png({ compressionLevel: 9 }).toFile(filePath);
+        } else if (fileExt === '.gif') {
+          await image.gif().toFile(filePath);
+        }
+
         data.gambarberita = file.filename;
       }
       return await this.service.create(data);
@@ -91,6 +105,19 @@ export class BeritaController {
   async update(@Param('id') id: string, @Body() data: any, @UploadedFile() file: any) {
     try {
       if (file) {
+        const filePath = join(process.cwd(), 'uploads/berita', file.filename);
+        const fileExt = extname(file.originalname).toLowerCase();
+        const image = sharp(file.path);
+
+        // Kompres dan simpan sesuai format asli
+        if (fileExt === '.jpg' || fileExt === '.jpeg') {
+          await image.jpeg({ quality: 30 }).toFile(filePath);
+        } else if (fileExt === '.png') {
+          await image.png({ compressionLevel: 9 }).toFile(filePath);
+        } else if (fileExt === '.gif') {
+          await image.gif().toFile(filePath);
+        }
+
         data.gambarberita = file.filename;
       }
       return await this.service.update(+id, data);
