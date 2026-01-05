@@ -36,21 +36,21 @@ import { ContactModule } from './contact/contact.module';
     // =====================
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        type: 'postgres',
-        host: config.get<string>('DB_HOST'),
-        port: Number(config.get<string>('DB_PORT')),
-        username: config.get<string>('DB_USERNAME'),
-        password: config.get<string>('DB_PASSWORD'),
-        database: config.get<string>('DB_NAME'),
-        autoLoadEntities: true,
-        synchronize: true,
+      useFactory: (config: ConfigService) => {
+        const nodeEnv = config.get<string>('NODE_ENV') || 'development';
+        const firstInit = config.get<string>('FIRST_INIT') === 'true';
 
-        // AUTO OFF DI PRODUCTION
-        // synchronize:
-        //   config.get('NODE_ENV') !== 'production' ||
-        //   process.env.FIRST_INIT === 'true',
-      }),
+        return {
+          type: 'postgres',
+          host: config.get<string>('DB_HOST'),
+          port: Number(config.get<string>('DB_PORT')),
+          username: config.get<string>('DB_USERNAME'),
+          password: config.get<string>('DB_PASSWORD'),
+          database: config.get<string>('DB_NAME'),
+          autoLoadEntities: true,
+          synchronize: nodeEnv !== 'production' || firstInit,
+        };
+      },
     }),
 
     // =====================
