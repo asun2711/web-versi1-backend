@@ -25,4 +25,7 @@ export class Perusahaan {
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   logoperusahaan: string | null;
+
+  @Column({ type: 'varchar', length: 255, nullable: true }) 
+  iconperusahaan: string | null; 
 }
