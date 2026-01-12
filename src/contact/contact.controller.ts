@@ -2,7 +2,7 @@ import { Controller, Post, Get, Patch, Delete, Param, Body, BadRequestException,
 import { ContactService } from './contact.service';
 import { Contact } from './contact.entity';
 
-@Controller('api/datacontact')
+@Controller('api/contact')
 export class ContactController {
   constructor(private readonly service: ContactService) {}
 
