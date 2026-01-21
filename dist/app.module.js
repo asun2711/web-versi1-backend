@@ -40,17 +40,20 @@ exports.AppModule = AppModule = __decorate([
             }),
             typeorm_1.TypeOrmModule.forRootAsync({
                 inject: [config_1.ConfigService],
-                useFactory: (config) => ({
-                    type: 'postgres',
-                    host: config.get('DB_HOST'),
-                    port: Number(config.get('DB_PORT')),
-                    username: config.get('DB_USERNAME'),
-                    password: config.get('DB_PASSWORD'),
-                    database: config.get('DB_NAME'),
-                    autoLoadEntities: true,
-                    synchronize: config.get('NODE_ENV') !== 'production' ||
-                        process.env.FIRST_INIT === 'true',
-                }),
+                useFactory: (config) => {
+                    const nodeEnv = config.get('NODE_ENV') || 'development';
+                    const firstInit = config.get('FIRST_INIT') === 'true';
+                    return {
+                        type: 'postgres',
+                        host: config.get('DB_HOST'),
+                        port: Number(config.get('DB_PORT')),
+                        username: config.get('DB_USERNAME'),
+                        password: config.get('DB_PASSWORD'),
+                        database: config.get('DB_NAME'),
+                        autoLoadEntities: true,
+                        synchronize: nodeEnv !== 'production' || firstInit,
+                    };
+                },
             }),
             perusahaan_module_1.PerusahaanModule,
             sejarah_module_1.SejarahModule,

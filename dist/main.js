@@ -40,8 +40,9 @@ const express = __importStar(require("express"));
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     app.enableCors();
-    app.use('/uploads', express.static((0, path_1.join)(__dirname, '..', 'uploads')));
+    app.use('/uploads', express.static((0, path_1.join)(process.cwd(), 'uploads')));
     await app.listen(process.env.PORT ?? 3000);
+    console.log(`🚀 Server running on port ${process.env.PORT ?? 3000}`);
 }
 bootstrap();
 //# sourceMappingURL=main.js.map

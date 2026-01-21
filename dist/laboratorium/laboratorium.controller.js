@@ -11,13 +11,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LaboratoriumController = void 0;
 const common_1 = require("@nestjs/common");
 const platform_express_1 = require("@nestjs/platform-express");
 const multer_1 = require("multer");
 const path_1 = require("path");
+const fs_1 = require("fs");
 const laboratorium_service_1 = require("./laboratorium.service");
+const sharp_1 = __importDefault(require("sharp"));
 let LaboratoriumController = class LaboratoriumController {
     service;
     constructor(service) {
@@ -32,22 +37,50 @@ let LaboratoriumController = class LaboratoriumController {
     async create(data, file) {
         try {
             if (file) {
+                const uploadDir = (0, path_1.join)(process.cwd(), 'uploads/laboratorium');
+                const filepath = (0, path_1.join)(uploadDir, file.filename);
+                const tempPath = (0, path_1.join)(uploadDir, 'tmp-' + file.filename);
+                const ext = (0, path_1.extname)(file.filename).toLowerCase();
+                let image = (0, sharp_1.default)(filepath);
+                if (ext === '.jpg' || ext === '.jpeg')
+                    image = image.jpeg({ quality: 70 });
+                if (ext === '.png')
+                    image = image.png({ compressionLevel: 8 });
+                if (ext === '.webp')
+                    image = image.webp({ quality: 70 });
+                await image.toFile(tempPath);
+                (0, fs_1.renameSync)(tempPath, filepath);
                 data.gambarlaboratorium = file.filename;
             }
             return await this.service.create(data);
         }
         catch (error) {
+            console.error('CREATE ERROR:', error);
             throw new common_1.BadRequestException('Failed to save laboratorium data: ' + error.message);
         }
     }
     async update(id, data, file) {
         try {
             if (file) {
+                const uploadDir = (0, path_1.join)(process.cwd(), 'uploads/laboratorium');
+                const filepath = (0, path_1.join)(uploadDir, file.filename);
+                const tempPath = (0, path_1.join)(uploadDir, 'tmp-' + file.filename);
+                const ext = (0, path_1.extname)(file.filename).toLowerCase();
+                let image = (0, sharp_1.default)(filepath);
+                if (ext === '.jpg' || ext === '.jpeg')
+                    image = image.jpeg({ quality: 70 });
+                if (ext === '.png')
+                    image = image.png({ compressionLevel: 8 });
+                if (ext === '.webp')
+                    image = image.webp({ quality: 70 });
+                await image.toFile(tempPath);
+                (0, fs_1.renameSync)(tempPath, filepath);
                 data.gambarlaboratorium = file.filename;
             }
             return await this.service.update(+id, data);
         }
         catch (error) {
+            console.error('UPDATE ERROR:', error);
             throw new common_1.BadRequestException('Failed to update laboratorium data: ' + error.message);
         }
     }
@@ -56,6 +89,7 @@ let LaboratoriumController = class LaboratoriumController {
             return await this.service.remove(+id);
         }
         catch (error) {
+            console.error('DELETE ERROR:', error);
             throw new common_1.BadRequestException('Failed to remove laboratorium data: ' + error.message);
         }
     }
@@ -78,7 +112,12 @@ __decorate([
     (0, common_1.Post)(),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('gambarlaboratorium', {
         storage: (0, multer_1.diskStorage)({
-            destination: './uploads/laboratorium',
+            destination: (req, file, callback) => {
+                const uploadDir = (0, path_1.join)(process.cwd(), 'uploads/laboratorium');
+                if (!(0, fs_1.existsSync)(uploadDir))
+                    (0, fs_1.mkdirSync)(uploadDir, { recursive: true });
+                callback(null, uploadDir);
+            },
             filename: (req, file, callback) => {
                 const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
                 const ext = (0, path_1.extname)(file.originalname);
@@ -89,12 +128,10 @@ __decorate([
             const allowedTypes = /jpg|jpeg|png|gif/;
             const mimetype = allowedTypes.test(file.mimetype);
             const extnameCheck = allowedTypes.test((0, path_1.extname)(file.originalname).toLowerCase());
-            if (mimetype && extnameCheck) {
+            if (mimetype && extnameCheck)
                 callback(null, true);
-            }
-            else {
+            else
                 callback(new common_1.BadRequestException('Only image files are allowed!'), false);
-            }
         },
     })),
     __param(0, (0, common_1.Body)()),
@@ -107,7 +144,12 @@ __decorate([
     (0, common_1.Put)(':id'),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('gambarlaboratorium', {
         storage: (0, multer_1.diskStorage)({
-            destination: './uploads/laboratorium',
+            destination: (req, file, callback) => {
+                const uploadDir = (0, path_1.join)(process.cwd(), 'uploads/laboratorium');
+                if (!(0, fs_1.existsSync)(uploadDir))
+                    (0, fs_1.mkdirSync)(uploadDir, { recursive: true });
+                callback(null, uploadDir);
+            },
             filename: (req, file, callback) => {
                 const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
                 const ext = (0, path_1.extname)(file.originalname);
@@ -118,12 +160,10 @@ __decorate([
             const allowedTypes = /jpg|jpeg|png|gif/;
             const mimetype = allowedTypes.test(file.mimetype);
             const extnameCheck = allowedTypes.test((0, path_1.extname)(file.originalname).toLowerCase());
-            if (mimetype && extnameCheck) {
+            if (mimetype && extnameCheck)
                 callback(null, true);
-            }
-            else {
+            else
                 callback(new common_1.BadRequestException('Only image files are allowed!'), false);
-            }
         },
     })),
     __param(0, (0, common_1.Param)('id')),
